@@ -25,6 +25,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split 
 from sklearn.datasets import make_circles
 ```
 
@@ -435,6 +436,121 @@ plt.plot(relu(input_linear))
 ```
 
 ![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_10.png)
+
+
+## Training & Testing Datasplit
+
+In the example above I used a single dataset to both train and test the model. Let's split this dataset so that we have a fresh testing dataset for the model.
+
+```python
+# training and testing data split using scikit-learn
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.20, random_state=42)
+
+# check shape
+X_train.shape, X_test.shape, y_train.shape, y_test.shape
+# ((800, 2), (200, 2), (800,), (200,))
+```
+
+```python
+# rebuild the best model from above
+# train on training set and eval on testing
+tf.random.set_seed(42)
+
+model_circles_lr10e_3 = tf.keras.Sequential([
+    tf.keras.layers.Dense(4, activation="relu", name="input_layer"),
+    tf.keras.layers.Dense(4, activation="relu", name="dense_layer"),
+    tf.keras.layers.Dense(1, activation="sigmoid", name="output_layer")
+])
+
+model_circles_lr10e_3.compile(loss="binary_crossentropy",
+                       optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+                       metrics=["accuracy"])
+
+history_lr10e_3 = model_circles_lr10e_3.fit(X_train, y_train,
+                    validation_data=(X_test, y_test),
+                    epochs=2000)
+
+# Epoch 2000/2000
+# 25/25 [==============================] - 0s 3ms/step - loss: 1.0905e-04 - accuracy: 1.0000 - val_loss: 0.0080 - val_accuracy: 0.9950
+```
+
+```python
+decision_boundray(model=model_circles_lr10e_3, X=X_test, y=y_test)
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_11.png)
+
+
+## Learning Rate
+
+In the example above it took __256__ cycles to get to an __val_accuracy: 0.9000__:
+
+```
+25/25 [==============================] - 0s 3ms/step - loss: 0.2355 - accuracy: 0.9100 - val_loss: 0.2647 - val_accuracy: 0.8950
+Epoch 255/2000
+25/25 [==============================] - 0s 3ms/step - loss: 0.2338 - accuracy: 0.9137 - val_loss: 0.2636 - val_accuracy: 0.8900
+Epoch 256/2000
+25/25 [==============================] - 0s 3ms/step - loss: 0.2312 - accuracy: 0.9162 - val_loss: 0.2595 - val_accuracy: 0.9000
+Epoch 257/2000
+25/25 [==============================] - 0s 3ms/step - loss: 0.2255 - accuracy: 0.9162 - val_loss: 0.2390 - val_accuracy: 0.9000
+Epoch 258/2000
+25/25 [==============================] - 0s 3ms/step - loss: 0.2030 - accuracy: 0.9438 - val_loss: 0.2118 - val_accuracy: 0.9600
+```
+
+By increasing the learning rate we allow Tensorflow to make bigger changes to the model weights after each epoch. This should increase the initial speed with which the model is moving towards the optimum:
+
+```python
+tf.random.set_seed(42)
+
+model_circles_lr10e_2 = tf.keras.Sequential([
+    tf.keras.layers.Dense(4, activation="relu", name="input_layer"),
+    tf.keras.layers.Dense(4, activation="relu", name="dense_layer"),
+    tf.keras.layers.Dense(1, activation="sigmoid", name="output_layer")
+])
+
+model_circles_lr10e_2.compile(loss="binary_crossentropy",
+                       optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
+                       metrics=["accuracy"])
+
+history_lr10e_2 = model_circles_lr10e_2.fit(X_train, y_train,
+                    validation_data=(X_test, y_test),
+                    epochs=2000)
+
+# Epoch 2000/2000
+# 25/25 [==============================] - 0s 3ms/step - loss: 7.4626e-06 - accuracy: 1.0000 - val_loss: 0.0112 - val_accuracy: 0.9950
+```
+
+<!-- #region -->
+With the increases learning rate we alread reach __90%__ after __25__ epochs:
+
+
+```
+25/25 [==============================] - 0s 3ms/step - loss: 0.4151 - accuracy: 0.8475 - val_loss: 0.4481 - val_accuracy: 0.8050
+Epoch 14/2000
+25/25 [==============================] - 0s 3ms/step - loss: 0.3880 - accuracy: 0.8625 - val_loss: 0.4032 - val_accuracy: 0.8700
+Epoch 15/2000
+25/25 [==============================] - 0s 4ms/step - loss: 0.3304 - accuracy: 0.9025 - val_loss: 0.2930 - val_accuracy: 0.9550
+Epoch 16/2000
+25/25 [==============================] - 0s 3ms/step - loss: 0.2191 - accuracy: 0.9937 - val_loss: 0.2185 - val_accuracy: 1.0000
+```
+<!-- #endregion -->
+
+```python
+plt.figure(figsize=(14, 7))
+plt.subplot(1, 2, 1)
+plt.title("Training Dataset")
+decision_boundray(model=model_circles_lr10e_2, X=X_train, y=y_train)
+plt.subplot(1, 2, 2)
+plt.title("Testing Dataset")
+decision_boundray(model=model_circles_lr10e_2, X=X_test, y=y_test)
+plt.show()
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_12.png)
+
+
+### Finding the ideal learning rate
 
 ```python
 
