@@ -185,7 +185,7 @@ y
 plt.scatter(X,y)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_02.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_02.png)
 
 
 ### Train-Test Datasplit
@@ -210,7 +210,7 @@ plt.scatter(X_test, y_test, color="hotpink", label="Testing Data")
 plt.legend()
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_03.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_03.png)
 
 ```python
 # to get around biases it is better to shuffle your data
@@ -236,7 +236,7 @@ plt.scatter(X_test, y_test, color="hotpink", label="Testing Data")
 plt.legend()
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_04.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_04.png)
 
 
 ### Create the Model
@@ -292,7 +292,7 @@ from tensorflow.keras.utils import plot_model
 plot_model(model=model, show_shapes=True, show_layer_names=True, expand_nested=False)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_05.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_05.png)
 
 ```python
 model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=99)
@@ -346,7 +346,7 @@ plot_predictions(train_data=X_train,
                  predictions=y_pred)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_06.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_06.png)
 
 
 ### Regression Evaluation Metrics
@@ -447,7 +447,7 @@ plt.scatter(X_test, y_test, color="hotpink", label="Testing Data")
 plt.legend()
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_07.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_07.png)
 
 
 ### Add Model Complexity
@@ -492,7 +492,7 @@ plot_predictions(train_data=X_train,
                  predictions=y_pred_1)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_08.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_08.png)
 
 
 #### model_2
@@ -529,7 +529,7 @@ plot_predictions(train_data=X_train,
                  predictions=y_pred_2)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_09.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_09.png)
 
 
 #### model_3
@@ -567,7 +567,7 @@ plot_predictions(train_data=X_train,
                  predictions=y_pred_3)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_10.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_10.png)
 
 
 #### model_4
@@ -605,7 +605,7 @@ plot_predictions(train_data=X_train,
                  predictions=y_pred_4)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_11.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_11.png)
 
 
 #### model_5
@@ -642,7 +642,7 @@ plot_predictions(train_data=X_train,
                  predictions=y_pred_5)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_12.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_12.png)
 
 
 #### model_6
@@ -678,7 +678,7 @@ plot_predictions(train_data=X_train,
                  predictions=y_pred_6)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_13.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_13.png)
 
 
 #### model_7
@@ -715,7 +715,7 @@ plot_predictions(train_data=X_train,
                  predictions=y_pred_7)
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_14.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_14.png)
 
 
 ### Comparing Experiments
@@ -895,7 +895,7 @@ insurance_data = pd.read_csv('https://raw.githubusercontent.com/mpolinowski/Mach
 insurance_data
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_15.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_15.png)
 
 ```python
 # shuffle dataframe to prevent bias
@@ -903,7 +903,7 @@ insurance_data_random = insurance_data.sample(frac=1)
 insurance_data_random
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_16.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_16.png)
 
 ```python
 # creating numerical labels for strings
@@ -932,7 +932,7 @@ X_train
 # 80% => 1070 rows × 11 columns
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_18.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_18.png)
 
 
 ### Model Building
@@ -1080,7 +1080,7 @@ plt.xlabel("epochs")
 # the improvements keep creeping in slowly.
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_19.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_19.png)
 
 
 ### When to stop training?
@@ -1116,7 +1116,7 @@ Change the values of features to a common scale without distorting differences i
 X["age"].plot(kind="hist")
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_20.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_20.png)
 
 ```python
 X["bmi"].plot(kind="hist")
@@ -1130,7 +1130,7 @@ X["children"].value_counts()
 # Name: children, dtype: int64
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_21.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_21.png)
 
 
 #### Feature Scaling with SciKit
@@ -1225,7 +1225,7 @@ plt.ylabel("loss")
 plt.xlabel("epochs")
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_22.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_22.png)
 
 ```python
 tf.random.set_seed(42)
@@ -1262,7 +1262,7 @@ plt.ylabel("loss")
 plt.xlabel("epochs")
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_23.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_23.png)
 
 ```python
 
