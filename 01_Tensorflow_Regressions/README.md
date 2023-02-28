@@ -48,7 +48,7 @@ plt.scatter(X, y)
 plt.show
 ```
 
-![Tensorflow Neural Network Regression](../assets/01a_Tensorflow_Regressions_01.png)
+![Tensorflow Neural Network Regression](https://github.com/mpolinowski/tf-2023/blob/master/assets/01a_Tensorflow_Regressions_01.png?raw=true)
 
 
 ## Input and Output Shapes
