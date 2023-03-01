@@ -27,6 +27,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split 
 from sklearn.datasets import make_circles
+from sklearn.metrics import confusion_matrix
 ```
 
 ## Working with Non-Linear Datasets
@@ -472,7 +473,7 @@ history_lr10e_3 = model_circles_lr10e_3.fit(X_train, y_train,
                     epochs=2000)
 
 # Epoch 2000/2000
-# 25/25 [==============================] - 0s 3ms/step - loss: 1.0905e-04 - accuracy: 1.0000 - val_loss: 0.0080 - val_accuracy: 0.9950
+# 25/25 [==============================] - 0s 4ms/step - loss: 2.2199e-04 - accuracy: 1.0000 - val_loss: 0.0131 - val_accuracy: 0.9950
 ```
 
 ```python
@@ -518,7 +519,7 @@ history_lr10e_2 = model_circles_lr10e_2.fit(X_train, y_train,
                     epochs=2000)
 
 # Epoch 2000/2000
-# 25/25 [==============================] - 0s 3ms/step - loss: 7.4626e-06 - accuracy: 1.0000 - val_loss: 0.0112 - val_accuracy: 0.9950
+# 25/25 [==============================] - 0s 3ms/step - loss: 4.2108e-04 - accuracy: 1.0000 - val_loss: 0.0158 - val_accuracy: 0.9900
 ```
 
 <!-- #region -->
@@ -551,6 +552,227 @@ plt.show()
 
 
 ### Finding the ideal learning rate
+
+Comparing the learning progress of the previous two identical experiments - with a difference in learning rate `1e-3` vs `1e-2`
+
+```python
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+pd.DataFrame(history_lr10e_3.history).plot(ax=axes[0], title="Learning Rate 1e-3")
+pd.DataFrame(history_lr10e_2.history).plot(ax=axes[1], title="Learning Rate 1e-2")
+# with a larger learning rate the loss/accuracy improves much quicker
+# but a larger learning rate also means that we get some overshots / fluctuations in performance
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_13.png)
+
+
+### Dynamically adjust the Learning Rate
+
+We can use the Keras `LearningRateScheduler()` in a __Callback__ to update the learning rate of the used optimizer according to the schedule function with each new epoch.
+
+```python
+# create a new model based on model_circles_lr10e_3
+tf.random.set_seed(7)
+
+model_circles_lr_callback = tf.keras.Sequential([
+    tf.keras.layers.Dense(4, activation="relu", name="input_layer"),
+    tf.keras.layers.Dense(4, activation="relu", name="dense_layer"),
+    tf.keras.layers.Dense(1, activation="sigmoid", name="output_layer")
+])
+
+model_circles_lr_callback.compile(loss="binary_crossentropy",
+                                 optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+                                 metrics=["accuracy"])
+
+# introduce learning scheduler callback to increase the learning rate
+# with every epoch by `0.0001 times 10e(epoch/100)`
+learning_rate_callback = tf.keras.callbacks.LearningRateScheduler(lambda epoch: 1e-4 * 10**(epoch/100))
+
+history_lr_callback = model_circles_lr_callback.fit(X_train, y_train,
+                                      validation_data=(X_test, y_test), epochs=500,
+                                      callbacks=[learning_rate_callback], verbose=1)
+
+# the learning rate, initially, increases sensibly. But later explodes leading to a terrible performance:
+# Epoch 500/500
+# 25/25 [==============================] - 0s 3ms/step - loss: 0.7646 - accuracy: 0.5025 - val_loss: 0.6961 - val_accuracy: 0.5000 - lr: 9.7724
+```
+
+```python
+# plot the learning rate progression
+lr = 1e-4 * (10 ** (tf.range(500)/100))
+plt.plot(tf.range(500), lr)
+plt.ylabel("Learning Rate")
+plt.xlabel("Epoch")
+plt.show()
+# the adaptive learning rate stays reasonable up until the 300th epoch
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_14.png)
+
+```python
+pd.DataFrame(history_lr_callback.history).plot(title="Learning Rate Scheduler")
+# and the learning rate abve the 200th epoch leads to more and more fluctuations in loss and accuracy.
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_15.png)
+
+```python
+# the "ideal learning rate" is usally 10 times smaller than the value at the bottom of the loss curve (`loss = f(lr)`)
+plt.figure(figsize=(10, 7))
+plt.xlabel("Learning Rate")
+plt.ylabel("Loss")
+plt.semilogx(lr, history_lr_callback.history["loss"])
+plt.show()
+# for the plot below this would be around `3*10e-3` and `4*10e-3`
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_16.png)
+
+```python
+# re-run the model with the ideal learning rate
+tf.random.set_seed(42)
+
+model_circles_ideal_lr = tf.keras.Sequential([
+    tf.keras.layers.Dense(4, activation="relu", name="input_layer"),
+    tf.keras.layers.Dense(4, activation="relu", name="dense_layer"),
+    tf.keras.layers.Dense(1, activation="sigmoid", name="output_layer")
+])
+
+model_circles_ideal_lr.compile(loss="binary_crossentropy",
+                                 optimizer=tf.keras.optimizers.Adam(learning_rate=4*10e-3),
+                                 metrics=["accuracy"])
+
+history_ideal_lr = model_circles_ideal_lr.fit(X_train, y_train,
+                                      validation_data=(X_test, y_test),
+                                      epochs=500, verbose=1)
+
+# Epoch 500/500
+# 25/25 [==============================] - 0s 3ms/step - loss: 0.0038 - accuracy: 1.0000 - val_loss: 0.0100 - val_accuracy: 1.0000
+```
+
+```python
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+pd.DataFrame(history_ideal_lr.history).plot(ax=axes[0], title="Ideal Learning Rate")
+decision_boundray(model=model_circles_ideal_lr, X=X_test, y=y_test)
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_17.png)
+
+
+## Confusion Matrix
+
+So far I used __Accuracy__ as metric to evaluate the performance of a trained model. But accuracy can fall short of representing a dataset with imbalanced classes. If a class only makes up 1% of a dataset even if our model fails 100% of the time to predict the class we still end up with a high accuracy overall:
+
+* _Accuracy = (tp + tn) / (tp + tn + fp + fn)_
+  * `tf.keras.metrics.Accuracy()`, `sklearn.metrics.accuracy_score()`
+
+A metric that allows us to indicate the amount of false positive predictions is __Precision__:
+
+* _Precision = tp / (tp + fp)_
+  * `tf.keras.metrics.Precision()`, `sklearn.metrics.precision_score()`
+
+A metric to evaluate the amount of false negative predictions is __Recall__:
+
+* _Recall = tp / (tp + fn)_
+  * `tf.keras.metrics.Recall()`, `sklearn.metrics.recall_score()`
+
+Depending on our problem we can use precision or recall instead of accuracy as the training performance metric. A metric that combines both recall and precision is the __F1 Score__ in SciKit_Learn:
+
+* _F1-score = 2 * (precision * recall)/(precision + recall)_
+  * `sklearn.metrics.f1_score()`
+  
+A good visual representation of a models performance is the __Confusion Matrix__ that compares predictions to the true value `sklearn.metrics.confusion_matrix()`.
+
+```python
+# check loss and accuracy of the previous model
+loss, accuracy = model_circles_ideal_lr.evaluate(X_test, y_test)
+print(f"INFO :: Model loss - {loss:.5f}")
+print(f"INFO :: Model accuracy - {(accuracy*100):.2f}%")
+# 7/7 [==============================] - 0s 2ms/step - loss: 0.0100 - accuracy: 1.0000
+# INFO :: Model loss - 0.01005
+# INFO :: Model accuracy - 100.00%
+```
+
+```python
+# confusion matrix
+## get label predictions using the trained model
+y_pred = model_circles_ideal_lr.predict(X_test)
+# y_pred, y_test
+# the predictions we get are floats while the true values are binary `1` or `0`
+# round the prediction to be able to compare them:
+y_pred_rnd = tf.round(y_pred)
+```
+
+```python
+confusion_matrix(y_pred_rnd, y_test)
+# array([[100,   0],
+#        [  0, 100]])
+```
+
+```python
+# plot confusion matrix
+import itertools
+
+def plot_confusion_matrix(y_pred=y_pred_rnd, y_test=y_test):
+        figsize = (10, 10)
+
+        # create the confusion matrix
+        cm = confusion_matrix(y_pred_rnd, y_test)
+
+        # normalize
+        cm_norm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+        # cm_norm
+        # array([[1., 0.],
+        #        [0., 1.]])
+
+        number_of_classes = cm.shape[0]
+        # 2
+
+        # plot matrix
+        fig, ax = plt.subplots(figsize=figsize)
+        cax = ax.matshow(cm, cmap=plt.cm.Greens)
+        fig.colorbar(cax)
+
+        # create classes
+        classes = False
+
+        if classes:
+            labels = classes
+        else:
+            labels = np.arange(cm.shape[0])
+
+        # axes lables
+        ax.set(title="Confusion Matrix",
+              xlabel="Prediction",
+              ylabel="True",
+              xticks=np.arange(number_of_classes),
+              yticks=np.arange(number_of_classes),
+              xticklabels=labels,
+              yticklabels=labels)
+
+        ax.xaxis.set_label_position("bottom")
+        ax.title.set_size(20)
+        ax.xaxis.label.set_size(20)
+        ax.yaxis.label.set_size(20)
+        ax.xaxis.tick_bottom()
+
+
+        # colour threshold
+        threshold = (cm.max() + cm.min()) / 2.
+
+        # add text to cells
+        for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+            plt.text(j, i , f"{cm[i, j]} ({cm_norm[i, j]*100:.1f}%)",
+            horizontalalignment="center",
+            color="white" if cm[i, j] > threshold else "black",
+            size=15)
+```
+
+```python
+plot_confusion_matrix(y_pred, y_test)
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_18.png)
 
 ```python
 
