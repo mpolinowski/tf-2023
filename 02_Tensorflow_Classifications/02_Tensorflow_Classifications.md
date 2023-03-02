@@ -25,6 +25,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import random
 from sklearn.model_selection import train_test_split 
 from sklearn.datasets import make_circles
 from sklearn.metrics import confusion_matrix
@@ -364,6 +365,9 @@ model_circles_6.evaluate(X, y)
 decision_boundray(model=model_circles_6, X=X, y=y)
 # there you go...
 ```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_06b.png)
+
 
 ## Non-linear Activation Functions
 
@@ -773,6 +777,206 @@ plot_confusion_matrix(y_pred, y_test)
 ```
 
 ![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_18.png)
+
+
+# Multiclass Classifications
+
+Working with the MNIST Fashion Dataset -> 60k images / 10 classes
+
+```python
+# importing the mnist dataset with keras
+(train_data, train_labels), (test_data, test_labels) = tf.keras.datasets.fashion_mnist.load_data()
+train_data.shape, test_data.shape
+# ((60000, 28, 28), (10000, 28, 28)) => 60k training images & 10k testing images with 28x28px
+```
+
+```python
+# show example data
+
+## training labels
+class_names = ["T-shirt/Top", "Trousers", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle Boot"]
+
+## print label and data for index 666
+print(f"Training Label:\n{class_names[train_labels[666]]}\n")
+print(f"Training Data:\n{train_data[666]}")
+
+plt.imshow(train_data[666], cmap=plt.cm.binary)
+plt.title(class_names[train_labels[666]])
+
+# Training Label:
+# Sneaker
+
+# Training Data:
+# [[  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   2   0   0   0  25  51   0   5   0   0   0   0   0   0   0   0  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   2  72  74 115 175   7   0   7   5   0   2   0 146 110   7  0]
+#  [  0   0   0   0   0   0   0   0   0   0   0  54  95  92 123  77 123  72  20   0   0   0   0   0 255 136  51  0]
+#  [  0   0   0   0   0   0   2   0   2  38  79  97 118  90 105 121  95 115  128  59  48   5   5  64 118 103  82 0]
+#  [  0   0   0   0   0   5   2   0  61 121 108  92 115 162 167 162 175 133  105 113 144 133 110 133 144 146 141 2]
+#  [  2   0   0   0   0   0   5  36 113 103  95 118 128 126 110 108 151 182  195 167 139 136 136 115 126 108 123 2]
+#  [  0   0   2   0   7  33  51  85 105 123 128  92  90  79 108 133 103 121  162 170 193 206 151 126 123 123 118 5]
+#  [  5  33  48  59  72  74  82  82 115 123 121 118 139 115  90 133 139 136  149 164 180 170 157 170 151 139 131 2]
+#  [ 61 136 113  90  95  92 100 108 103 103 113 126 133 164 170 146 157 149  115  87  72  82 110 123 128 131 100 0]
+#  [ 41  79 118 159 149 139 136 131 113 110 113 118 113  79  85  43  15  25  36  38  51  59  41  41  41  36  54  0]
+#  [ 46  66  30  28  28  23  28  25  23  28  30  36  38  54  56  66  92 100  97  92  82  72  77  66  69  74  85 15]
+#  [  0  20  54  69  72  72  79  82  79  82  79  82  82  72  82  87  74  72  74  64  54  54  56  51  56  54  51  7]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0   0   0   0   0   0   0   0   0   0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0   0   0   0   0   0   0   0   0   0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0   0   0   0   0   0   0   0   0   0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0   0   0   0   0   0   0   0   0   0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0   0   0   0   0   0   0   0   0   0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0   0   0   0   0   0   0   0   0   0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0   0   0   0   0   0   0   0   0   0]
+#  [  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  0   0   0   0   0   0   0   0   0   0]]
+
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_01.png)
+
+```python
+# plot multiple random images with labels
+ran_gen = np.random.default_rng()
+
+plt.figure(figsize=(12, 12))
+
+for i in range(12):
+    ax = plt.subplot(4, 4, i+1)
+    random_index = ran_gen.integers(low=0, high=59999, size=1)
+    plt.imshow(train_data[random_index[0]], cmap=plt.cm.binary)
+    plt.title(class_names[train_labels[random_index[0]]])
+    plt.axis(False)
+```
+
+![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_02.png)
+
+
+## Multiclass Classification Model
+
+* __Input Shape__: Shape of the input image -> train_data[0].shape = `(28, 28)`
+* __Output Shape__: Number of labels -> len(np.unique(train_labels)) = `10`
+* __Loss Function__: `tf.keras.losses.CategoricalCrossentropy`
+* __Output Layer Activation__: `softmax`
+
+```python
+# determin the input and output shape
+train_data[0].shape, len(np.unique(train_labels))
+# ((28, 28), 10)
+```
+
+```python
+# building the model - 1st attempt
+tf.random.set_seed(42)
+
+model_multiclass = tf.keras.Sequential([
+    tf.keras.layers.Dense(4, activation="relu", name="input_layer"),
+    tf.keras.layers.Dense(4, activation="relu", name="dense_layer1"),
+    tf.keras.layers.Dense(10, activation="softmax", name="output_layer")
+])
+                          
+model_multiclass.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
+                        optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+                        metrics="accuracy")
+                          
+history_multi = model_multiclass.fit(train_data, train_labels, batch_size=32,
+                    validation_data=(test_data, test_labels),
+                    epochs=100, verbose=1)
+
+# ValueError: Shapes (32,) and (32, 28, 10) are incompatible
+# => input data needs to be flattened
+```
+
+```python
+# building the model - 2nd attempt
+tf.random.set_seed(42)
+
+model_multiclass = tf.keras.Sequential([
+    # flatten data from `28*28` to `None, 784`
+    tf.keras.layers.Flatten(input_shape=(28, 28)),
+    tf.keras.layers.Dense(4, activation="relu", name="input_layer"),
+    tf.keras.layers.Dense(4, activation="relu", name="dense_layer1"),
+    tf.keras.layers.Dense(10, activation="softmax", name="output_layer")
+])
+                          
+model_multiclass.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
+                        optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+                        metrics="accuracy")
+                          
+history_multi = model_multiclass.fit(train_data, train_labels, batch_size=32,
+                    validation_data=(test_data, test_labels),
+                    epochs=100, verbose=1)
+
+# ValueError: Shapes (32, 1) and (32, 10) are incompatible
+# => CategoricalCrossentropy() expects labels to be OneHot encoded
+# use SparseCategoricalCrossentropy() instead
+```
+
+> Use `SparseCategoricalCrossentropy()` for "regular" labels
+
+```python
+# building the model - 3rd attempt
+tf.random.set_seed(42)
+
+model_multiclass = tf.keras.Sequential([
+    # flatten data from `28*28` to `None, 784`
+    tf.keras.layers.Flatten(input_shape=(28, 28)),
+    tf.keras.layers.Dense(4, activation="relu", name="input_layer"),
+    tf.keras.layers.Dense(4, activation="relu", name="dense_layer1"),
+    tf.keras.layers.Dense(10, activation="softmax", name="output_layer")
+])
+                          
+model_multiclass.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+                        optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+                        metrics="accuracy")
+                          
+history_multi = model_multiclass.fit(train_data, train_labels, batch_size=32,
+                    validation_data=(test_data, test_labels),
+                    epochs=100, verbose=1)
+
+# Epoch 100/100
+# 1875/1875 [==============================] - 4s 2ms/step - loss: 0.8026 - accuracy: 0.6657 - val_loss: 0.9066 - val_accuracy: 0.6479
+```
+
+> Use `CategoricalCrossentropy()` for OneHot encoded labels
+
+```python
+# building the model - with OneHot encoded labels (alternative)
+## OneHot encode labels
+train_labels_hot = tf.one_hot(train_labels, depth=10)
+test_labels_hot = tf.one_hot(test_labels, depth=10)
+
+## re-run model with CategoricalCrossentropy() and ecoded labels
+tf.random.set_seed(42)
+
+model_multiclass_OneHot = tf.keras.Sequential([
+    # flatten data from `28*28` to `None, 784`
+    tf.keras.layers.Flatten(input_shape=(28, 28)),
+    tf.keras.layers.Dense(4, activation="relu", name="input_layer"),
+    tf.keras.layers.Dense(4, activation="relu", name="dense_layer1"),
+    tf.keras.layers.Dense(10, activation="softmax", name="output_layer")
+])
+                          
+model_multiclass_OneHot.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
+                        optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+                        metrics="accuracy")
+                          
+history_multi_OneHot = model_multiclass_OneHot.fit(train_data, train_labels_hot, batch_size=32,
+                    validation_data=(test_data, test_labels_hot),
+                    epochs=100, verbose=1)
+
+# Epoch 100/100
+# 1875/1875 [==============================] - 4s 2ms/step - loss: 1.3885 - accuracy: 0.3996 - val_loss: 1.4322 - val_accuracy: 0.4055
+```
+
+```python
+
+```
 
 ```python
 
