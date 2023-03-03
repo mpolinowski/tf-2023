@@ -129,7 +129,7 @@ circles, X.shape, y.shape
 plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.RdYlBu)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_01.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_01.png)
 
 
 ## Building the Model
@@ -201,7 +201,7 @@ plt.ylabel("loss")
 plt.xlabel("epochs")
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_02.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_02.png)
 
 
 ### Why it Fails
@@ -246,7 +246,7 @@ decision_boundray(model=model_circles_1, X=X, y=y)
 # it then expands this line and tries to divide both classes - and fails with a circular dataset.
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_03.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_03.png)
 
 
 ## Non Linearity
@@ -256,7 +256,7 @@ decision_boundray(model=model_circles_1, X=X, y=y)
 
 A model useable for linear problems will remain stuck at an accuracy around 50% - purely guessing when predicting:
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_04.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_04.png)
 
 ```python
 # rebuilding the model (above)
@@ -281,13 +281,13 @@ model_circles_2.evaluate(X, y)
 decision_boundray(model=model_circles_2, X=X, y=y)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_05.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_05.png)
 
 <!-- #region -->
 I am starting to get a good separation with the following setup after approx. 2000 epochs:
 
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_06.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_06.png)
 <!-- #endregion -->
 
 ```python
@@ -367,7 +367,7 @@ decision_boundray(model=model_circles_6, X=X, y=y)
 # there you go...
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_06b.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_06b.png)
 
 
 ## Non-linear Activation Functions
@@ -380,7 +380,7 @@ input_linear = tf.cast(tf.range(-10, 10), tf.float32)
 plt.plot(input_linear)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_07.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_07.png)
 
 
 ### Linear Activation Function
@@ -400,7 +400,7 @@ linear(input_linear)
 plt.plot(linear(input_linear))
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_08.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_08.png)
 
 
 ### Sigmoid Activation Function
@@ -423,7 +423,7 @@ sigmoid(input_linear)
 plt.plot(sigmoid(input_linear))
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_09.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_09.png)
 
 
 ### reLU Activation Function
@@ -441,7 +441,7 @@ relu(input_linear)
 plt.plot(relu(input_linear))
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_10.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_10.png)
 
 
 ## Training & Testing Datasplit
@@ -485,7 +485,7 @@ history_lr10e_3 = model_circles_lr10e_3.fit(X_train, y_train,
 decision_boundray(model=model_circles_lr10e_3, X=X_test, y=y_test)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_11.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_11.png)
 
 
 ## Learning Rate
@@ -553,7 +553,7 @@ decision_boundray(model=model_circles_lr10e_2, X=X_test, y=y_test)
 plt.show()
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_12.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_12.png)
 
 
 ### Finding the ideal learning rate
@@ -568,7 +568,7 @@ pd.DataFrame(history_lr10e_2.history).plot(ax=axes[1], title="Learning Rate 1e-2
 # but a larger learning rate also means that we get some overshots / fluctuations in performance
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_13.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_13.png)
 
 
 ### Dynamically adjust the Learning Rate
@@ -612,14 +612,14 @@ plt.show()
 # the adaptive learning rate stays reasonable up until the 300th epoch
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_14.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_14.png)
 
 ```python
 pd.DataFrame(history_lr_callback.history).plot(title="Learning Rate Scheduler")
 # and the learning rate abve the 200th epoch leads to more and more fluctuations in loss and accuracy.
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_15.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_15.png)
 
 ```python
 # the "ideal learning rate" is usally 10 times smaller than the value at the bottom of the loss curve (`loss = f(lr)`)
@@ -631,7 +631,7 @@ plt.show()
 # for the plot below this would be around `3*10e-3` and `4*10e-3`
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_16.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_16.png)
 
 ```python
 # re-run the model with the ideal learning rate
@@ -661,7 +661,7 @@ pd.DataFrame(history_ideal_lr.history).plot(ax=axes[0], title="Ideal Learning Ra
 decision_boundray(model=model_circles_ideal_lr, X=X_test, y=y_test)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_17.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_17.png)
 
 
 ## Confusion Matrix
@@ -777,7 +777,7 @@ def plot_confusion_matrix(y_pred=y_pred_rnd, y_test=y_test):
 plot_confusion_matrix(y_pred, y_test)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Classifications_18.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Classifications_18.png)
 
 
 # Multiclass Classifications
@@ -839,7 +839,7 @@ plt.title(class_names[train_labels[666]])
 
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_01.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Multi_Classifications_01.png)
 
 ```python
 # plot multiple random images with labels
@@ -855,7 +855,7 @@ for i in range(12):
     plt.axis(False)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_02.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Multi_Classifications_02.png)
 
 
 ## Multiclass Classification Model
@@ -1054,7 +1054,7 @@ pd.DataFrame(history_multi_norm.history).plot(ax=axes[1], title="Normalized Data
 # nomalized rules!
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_03.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Multi_Classifications_03.png)
 
 ```python
 # confusion matrix
@@ -1117,7 +1117,7 @@ plt.semilogx(lr, model_multiclass_norm_lr_history.history["loss"])
 plt.show()
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_03a.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Multi_Classifications_03a.png)
 
 ```python
 # the lowest point is at 4e-3 -> divide by 10
@@ -1209,7 +1209,7 @@ y_pred = tf.argmax(test_predictions_ideal,axis=1)
 plot_confusion_matrix(y_pred=y_pred, y_true=test_labels, classes=class_names)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_04.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Multi_Classifications_04.png)
 
 
 ## Making predictions to further evaluate the model
@@ -1248,7 +1248,7 @@ random_image_prediction(model=model_multiclass_norm,
                        classes=class_names)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_05.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Multi_Classifications_05.png)
 
 ```python
 # function to pick a random image and run prediction
@@ -1293,7 +1293,7 @@ random_image_map_prediction(model=model_multiclass_norm,
                        classes=class_names)
 ```
 
-![Tensorflow - Classification Problems](../assets/02_Tensorflow_Multi_Classifications_06.png)
+![Tensorflow - Classification Problems](https://github.com/mpolinowski/tf-2023/blob/master/assets/02_Tensorflow_Multi_Classifications_06.png)
 
 
 ## Weights & Biases
