@@ -21,6 +21,8 @@ Since the model is already pre-trained we can expect that we will only need abou
 
 ## Feature Extraction
 
+Download a pre-trained model and set it's layers as un-trainable. The model is able to extract general features. All we need to do is adding a trainable dense layer (or a couple) at the end that we train to recognize our features among the features returned from the base model.
+
 
 * cd datasets
 * wget https://storage.googleapis.com/ztm_tf_course/food_vision/10_food_classes_10_percent.zip
@@ -214,6 +216,8 @@ efficientnet_model_url = 'https://tfhub.dev/tensorflow/efficientnet/b0/feature-v
 
 ```python
 # add image augmentations (optional)
+# was needed before - but the pre-trained model
+# usually does not need huge/augmented datasets
 data_augmentation_layer = Sequential([
     RandomFlip("horizontal_and_vertical"),
     RandomRotation(0.2),
@@ -278,8 +282,8 @@ history_resnet_model = resnet_model.fit(training_data, epochs=5,
                             validation_data=testing_data,
                             validation_steps=len(testing_data))
 
-# Epoch 15/15
-# 12s 531ms/step - loss: 5.6705 - accuracy: 0.6680 - val_loss: 22.5076 - val_accuracy: 0.2684
+# Epoch 5/5
+# 15s 325ms/step - loss: 0.2652 - accuracy: 0.9560 - val_loss: 0.6500 - val_accuracy: 0.7836
 ```
 
 ### Creating a EfficientNet-based Model
@@ -321,7 +325,7 @@ history_efficientnet_model = efficientnet_model.fit(training_data, epochs=15,
                             validation_steps=len(testing_data))
 
 # Epoch 15/15
-# 24/24 [==============================] - 10s 426ms/step - loss: 22.2573 - accuracy: 0.6880 - val_loss: 542.0494 - val_accuracy: 0.1132
+# 11s 228ms/step - loss: 0.1133 - accuracy: 0.9920 - val_loss: 0.3779 - val_accuracy: 0.8828
 ```
 
 ### Comparing both Models
@@ -372,43 +376,180 @@ plot_accuracy_curves(history1=history_resnet_model,
                      title2="EfficientNet Model")
 ```
 
+<!-- #region -->
 ![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_06.png)
 
 
+The accuracy of the EfficientNet model is even slightly better than the accuracy of the ResNet Model. There are several EfficientNet models to pick from:
+
+
+![Transfer Learning](../assets/04_Efficientnet_vs_Resnet.png)
+
+
+_Image source :: [EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks](https://arxiv.org/abs/1905.11946)_
+
+
+The higher the amount of parameters become the less ressource efficient a training tends to become. The Optimum seems to be around the `B4` model.
+<!-- #endregion -->
+
 ### Using the Tensorboard Callback
 
+#### ResNetV2 50 vs EfficientNetB0 vs EfficientNetB4
+
+Let's compare the trained `B0` model with the `B4` (and `ResNetv2 50`):
+
+
+##### EfficientNetB0
+
 ```python
+# building and training the __EfficientNet B0__ model
+efficientnet0_model_url = 'https://tfhub.dev/tensorflow/efficientnet/b0/feature-vector/1'
+
+efficientnet0_model = create_model(efficientnet0_model_url, len(class_names))
+
+efficientnet0_model.compile(loss='categorical_crossentropy',
+                    optimizer=Adam(learning_rate=1e-3),
+                    metrics=['accuracy'])
+
 tf.random.set_seed(SEED)
-# re-running the resnet training
-history_resnet_model = resnet_model.fit(training_data, epochs=15,
-        callbacks=create_tensorboard_callback(dir_name='../tensorboard/resnet',
-                                              experiment_name='resnet_01'),
+# fitting the model
+history_efficientnet0_model = efficientnet0_model.fit(training_data, epochs=15,
+        callbacks=create_tensorboard_callback(dir_name='../tensorboard/efficientnet',
+        experiment_name='resnet_b0'),
         steps_per_epoch=len(training_data),
         validation_data=testing_data,
         validation_steps=len(testing_data))
 
 # Epoch 15/15
-# 24/24 [==============================] - 13s 573ms/step - loss: 8.2926 - accuracy: 0.5573 - val_loss: 25.3469 - val_accuracy: 0.2252
+# 13s 284ms/step - loss: 0.1126 - accuracy: 0.9920 - val_loss: 0.3746 - val_accuracy: 0.8836
 ```
 
+##### EfficientNetB4
+
 ```python
+# building and training the __EfficientNet B4__ model
+efficientnet4_model_url = 'https://tfhub.dev/tensorflow/efficientnet/b4/feature-vector/1'
+
+efficientnet4_model = create_model(efficientnet4_model_url, len(class_names))
+
+efficientnet4_model.compile(loss='categorical_crossentropy',
+                    optimizer=Adam(learning_rate=1e-3),
+                    metrics=['accuracy'])
+
+tf.random.set_seed(SEED)
+# fitting the model
+history_efficientnet4_model = efficientnet4_model.fit(training_data, epochs=15,
+        callbacks=create_tensorboard_callback(dir_name='../tensorboard/efficientnet',
+        experiment_name='resnet_b4'),
+        steps_per_epoch=len(training_data),
+        validation_data=testing_data,
+        validation_steps=len(testing_data))
+
+# Epoch 15/15
+# 33s 711ms/step - loss: 0.1176 - accuracy: 0.9893 - val_loss: 0.4109 - val_accuracy: 0.8648
+```
+
+##### ResNetv2 50
+
+```python
+# building and training the __ResNetv2 50__ model
+resnet2_50_model_url = 'https://tfhub.dev/google/imagenet/resnet_v2_50/feature_vector/5'
+
+resnet2_50_model = create_model(resnet2_50_model_url, len(class_names))
+
+resnet2_50_model.compile(loss="categorical_crossentropy",
+                     optimizer=Adam(learning_rate=1e-3),
+                     metrics=["accuracy"])
+
 tf.random.set_seed(SEED)
 # re-running the resnet training
 history_resnet_model = resnet_model.fit(training_data, epochs=15,
-            callbacks=create_tensorboard_callback(dir_name='../tensorboard/efficientnet',
-                                                  experiment_name='efficientnet_01'),
-            steps_per_epoch=len(training_data),
-            validation_data=testing_data,
-            validation_steps=len(testing_data))
+        callbacks=create_tensorboard_callback(dir_name='../tensorboard/resnet',
+        experiment_name='resnet_v2_50'),
+        steps_per_epoch=len(training_data),
+        validation_data=testing_data,
+        validation_steps=len(testing_data))
 
 # Epoch 15/15
-# 24/24 [==============================] - 16s 680ms/step - loss: 6.3984 - accuracy: 0.6387 - val_loss: 22.5422 - val_accuracy: 0.2764
+# 19s 405ms/step - loss: 0.0056 - accuracy: 1.0000 - val_loss: 0.6888 - val_accuracy: 0.8028
 ```
 
 ```python
+efficientnet0_model.summary()
 
+# Model: "sequential_3"
+# _________________________________________________________________
+#  Layer (type)                Output Shape              Param #   
+# =================================================================
+#  rescaling_2 (Rescaling)     (None, 224, 224, 3)       0
+#  feature_extractor_layer (Ke  (None, 1280)             4049564   
+#  rasLayer)
+#  output_layer (Dense)        (None, 10)                12810
+# =================================================================
+# Total params: 4,062,374
+# Trainable params: 12,810
+# Non-trainable params: 4,049,564
+# _________________________________________________________________
 ```
 
 ```python
+efficientnet4_model.summary()
 
+# Model: "sequential_4"
+# _________________________________________________________________
+#  Layer (type)                Output Shape              Param #   
+# =================================================================
+#  rescaling_3 (Rescaling)     (None, 224, 224, 3)       0
+#  feature_extractor_layer (Ke  (None, 1792)             17673816  
+#  rasLayer)
+#  output_layer (Dense)        (None, 10)                17930     
+# =================================================================
+# Total params: 17,691,746
+# Trainable params: 17,930
+# Non-trainable params: 17,673,816
+# _________________________________________________________________
 ```
+
+```python
+resnet2_50_model.summary()
+
+# Model: "sequential_5"
+# _________________________________________________________________
+#  Layer (type)                Output Shape              Param #   
+# =================================================================
+#  rescaling_4 (Rescaling)     (None, 224, 224, 3)       0
+#  feature_extractor_layer (Ke  (None, 2048)             23564800  
+#  rasLayer)
+#  output_layer (Dense)        (None, 10)                20490    
+# =================================================================
+# Total params: 23,585,290
+# Trainable params: 20,490
+# Non-trainable params: 23,564,800
+# _________________________________________________________________
+```
+
+##### Summary
+
+* EfficientNetB0
+  * Trainable params: _12,810_
+  * Non-trainable params: _4,049,564_
+  * Training time per epoch: __13s__
+  * Results (15 epochs): val_loss: _0.3746_ - val_accuracy: __0.8836__
+* EfficientNetB4
+  * Trainable params: _17,930_
+  * Non-trainable params: _17,673,816_
+  * Training time per epoch: __33s__
+  * Results (15 epochs): val_loss: _0.4109_ - val_accuracy: __0.8648__
+* ResNet50 v2
+  * Trainable params: _20,490_
+  * Non-trainable params: _23,564,800_
+  * Training time per epoch: __19s__
+  * Results (15 epochs): val_loss: _0.6888_ - val_accuracy: __0.8028__
+
+```python
+# Load TensorBoard
+%load_ext tensorboard
+%tensorboard --logdir '../tensorboard/'
+```
+
+![Transfer Learning](../assets/04_Efficientnet_vs_Resnet_Tensorboard.png)
