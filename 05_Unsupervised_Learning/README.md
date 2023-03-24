@@ -80,7 +80,7 @@ print(features.head())
 plt.scatter(features['X1'], features['X2'], c=y)
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_01.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_01.png)
 
 ```python
 # add a third dimension from the noise data
@@ -92,7 +92,7 @@ ax = fig.add_subplot(111, projection='3d')
 ax.scatter(features['X1'], features['X2'], features['Xnoise'], c=y)
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_02.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_02.png)
 
 ```python
 # normalize the dataset
@@ -161,7 +161,7 @@ plt.scatter(encoded_2dim[:,0], encoded_2dim[:,1], c=y)
 # extra dimensions in our dataset
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_03.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_03.png)
 
 ```python
 decoded_2to3dim = autoencoder.predict(scaled_data)
@@ -176,7 +176,7 @@ ax = fig.add_subplot(111, projection='3d')
 ax.scatter(decoded_2to3dim[:,0], decoded_2to3dim[:,1], decoded_2to3dim[:,2], c=y)
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_04.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_04.png)
 
 
 ## Autoencoders for Image Data
@@ -191,7 +191,7 @@ Create a noisy version of the MNIST digits dataset and train an autoencoder to g
 plt.imshow(X_train[88])
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_05.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_05.png)
 
 ```python
 # normalize images
@@ -299,7 +299,7 @@ plt.axis(False)
 plt.imshow(passed_images[n[2]])
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_06.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_06.png)
 
 
 ## Autoencoders for Noise Removal
@@ -325,7 +325,7 @@ plt.axis(False)
 plt.imshow(noisy[n])
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_07.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_07.png)
 
 
 ### Build the Denoise Autoencoder
@@ -432,7 +432,7 @@ plt.axis(False)
 plt.imshow(denoised_samples[2])
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_08.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_08.png)
 
 
 ## Food
@@ -481,7 +481,7 @@ plt.yticks(fontsize=12)
 plt.show()
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_09.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_09.png)
 
 ```python
 df_t = df.transpose()
@@ -501,7 +501,7 @@ plt.figure(figsize=(12, 6))
 sns.heatmap(df_t, cmap='RdYlGn_r', linewidths=0.5, annot=False)
 ```
 
-![Unsupervised Learning with Tensorflow](../assets/05_Tensorflow_Unsupervised_Learning_10.png)
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_10.png)
 
 
 ### Use an Autoencoder to separate Features
@@ -573,6 +573,4 @@ sns.scatterplot(x='C1', y='C2', data=results.reset_index(), hue='index')
 # while Wales and N.Ireland 
 ```
 
-```python
-
-```
+![Unsupervised Learning with Tensorflow](https://github.com/mpolinowski/tf-2023/blob/master/assets/05_Tensorflow_Unsupervised_Learning_11.png)

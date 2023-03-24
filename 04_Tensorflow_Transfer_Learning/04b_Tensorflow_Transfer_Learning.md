@@ -114,7 +114,7 @@ for images, labels in training_data_10.take(1):
 | Model 4 | 100% Dataset | same as Model 1 | same as Model 3 |
 
 
-![Transfer Learning](../assets/04_Keras_Sequential_vs_Functional_API.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Keras_Sequential_vs_Functional_API.png)
 <!-- #endregion -->
 
 ### Model 0
@@ -347,7 +347,7 @@ plt.axis(False)
 plt.imshow(augmented_img/255)
 ```
 
-![Tensorflow Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_07.png)
+![Tensorflow Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_07.png)
 
 ```python
 # build model 1
@@ -643,7 +643,7 @@ fine_tuning_model_2 = model_2.fit(
 plot_accuracy_curves(history_model_2, "Pre-Training", fine_tuning_model_2, "Fine-Tuning")
 ```
 
-![Fine-tuning Pre-trained Models](../assets/04_Tensorflow_Transfer_Learning_08.png)
+![Fine-tuning Pre-trained Models](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_08.png)
 
 
 Added helper function to `helper.py`:
@@ -700,7 +700,7 @@ combine_training_curves(history_model_2, fine_tuning_model_2, pretraining_epochs
 # The fine-tuning works - accuracy keeps going up during the tuning epochs:
 ```
 
-![Fine-tuning Pre-trained Models](../assets/04_Tensorflow_Transfer_Learning_09.png)
+![Fine-tuning Pre-trained Models](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_09.png)
 
 
 ## Final Training
@@ -794,7 +794,7 @@ print(model_2.evaluate(testing_data_100))
 combine_training_curves(fine_tuning_model_2, history_model_2_full, pretraining_epochs=6)
 ```
 
-![Fine-tuning Pre-trained Models](../assets/04_Tensorflow_Transfer_Learning_10.png)
+![Fine-tuning Pre-trained Models](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_10.png)
 
 ```python
 # Load TensorBoard
@@ -802,9 +802,9 @@ combine_training_curves(fine_tuning_model_2, history_model_2_full, pretraining_e
 %tensorboard --logdir '../tensorboard/'
 ```
 
-![Fine-tuning Pre-trained Models](../assets/04_Tensorflow_Transfer_Learning_11.png)
+![Fine-tuning Pre-trained Models](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_11.png)
 
-![Fine-tuning Pre-trained Models](../assets/04_Tensorflow_Transfer_Learning_12.png)
+![Fine-tuning Pre-trained Models](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_12.png)
 
 ```python
 

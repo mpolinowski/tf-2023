@@ -344,7 +344,7 @@ print(fine_tuning_results)
 plot_accuracy_curves(history_model, "Pre-Training", history_fine_tuning_model, "Fine-Tuning")
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_13.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_13.png)
 
 ```python
 # the validation accuracy increase keeps slowing while training
@@ -352,7 +352,7 @@ plot_accuracy_curves(history_model, "Pre-Training", history_fine_tuning_model, "
 combine_training_curves(history_model, history_fine_tuning_model, pretraining_epochs=5)
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_14.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_14.png)
 
 
 The model keeps improving but there is a growing gap between training and validation. This means that the model is overfitting the test data. Leading to worse results during the validation run.
@@ -488,8 +488,8 @@ print(sk_accuracy)
 plot_confusion_matrix(y_pred=y_labels, y_true=predicted_classes, classes=class_names_101_10)
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_15.jpg)
-![Transfer Learning](../assets/hmmmm.gif)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_15.jpg)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/hmmmm.gif)
 
 ```python
 plot_confusion_matrix(y_pred=y_labels,
@@ -499,7 +499,7 @@ plot_confusion_matrix(y_pred=y_labels,
                       text_size=8)
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_16.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_16.png)
 
 <!-- #region -->
 We can see that the results are overall impressive. The `59.3%` accuracy is mostly based on a couple of classes that might be hard to distinguish in general:
@@ -694,7 +694,7 @@ f1_bar_chart = f1_scores.plot.bar(x='classname',
                                   figsize=(42,12))
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_17.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_17.png)
 
 ```python
 f1_scores_inverse = f1_scores.sort_values(by=['f1-score'])
@@ -705,7 +705,7 @@ f1_bar_chart = f1_scores_inverse.plot.barh(x='classname',
                                   figsize=(12,36))
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_18.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_18.png)
 
 
 ### Run Predictions
@@ -812,7 +812,7 @@ for i in range(9):
 
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_19.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_19.png)
 
 
 ### Find most Wrong Predictions
@@ -1011,7 +1011,7 @@ for i, row in enumerate(top_100_wrong[start_index:start_index+images_displayed].
     plt.axis(False)
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_20.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_20.png)
 
 
 ### Predict Custom Images
@@ -1048,8 +1048,4 @@ for image in custom_images:
     plt.imshow(image/255.)
     plt.title(f"Pred: {predicted_class} ({prediction_probabilities.max()*100:.2f} %)")
     plt.axis(False)
-```
-
-```python
-
 ```

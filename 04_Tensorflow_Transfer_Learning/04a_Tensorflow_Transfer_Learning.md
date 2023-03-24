@@ -150,13 +150,13 @@ plot8.title.set_text(f'Class: {class_names[7]}')
 steak_image = view_random_image(target_dir = training_directory, target_class=class_names[7])
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_01.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_01.png)
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_02.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_02.png)
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_03.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_03.png)
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_04.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_04.png)
 
 
 ### Preprocessing the Data
@@ -337,7 +337,7 @@ pd.DataFrame(history_resnet_model.history).plot(ax=axes[0], title="Resnet Model 
 pd.DataFrame(history_efficientnet_model.history).plot(ax=axes[1], title="EfficientNet Model (Multiclass)")
 ```
 
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_05.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_05.png)
 
 ```python
 # Plot the validation and training accuracy separately
@@ -377,13 +377,13 @@ plot_accuracy_curves(history1=history_resnet_model,
 ```
 
 <!-- #region -->
-![Transfer Learning](../assets/04_Tensorflow_Transfer_Learning_06.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Tensorflow_Transfer_Learning_06.png)
 
 
 The accuracy of the EfficientNet model is even slightly better than the accuracy of the ResNet Model. There are several EfficientNet models to pick from:
 
 
-![Transfer Learning](../assets/04_Efficientnet_vs_Resnet.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Efficientnet_vs_Resnet.png)
 
 
 _Image source :: [EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks](https://arxiv.org/abs/1905.11946)_
@@ -552,4 +552,4 @@ resnet2_50_model.summary()
 %tensorboard --logdir '../tensorboard/'
 ```
 
-![Transfer Learning](../assets/04_Efficientnet_vs_Resnet_Tensorboard.png)
+![Transfer Learning](https://github.com/mpolinowski/tf-2023/blob/master/assets/04_Efficientnet_vs_Resnet_Tensorboard.png)
