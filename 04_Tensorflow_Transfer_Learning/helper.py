@@ -8,7 +8,7 @@ import random
 from sklearn.metrics import confusion_matrix
 import tensorflow as tf
 from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Activation, Rescaling, RandomFlip, RandomRotation, RandomZoom, RandomContrast, RandomBrightness
+from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Activation, Rescaling, RandomFlip, RandomRotation, RandomZoom, RandomContrast, RandomBrightness, RandomTranslation
 
 
 # helper function to pre-process images for predictions
@@ -38,7 +38,24 @@ def view_random_image(target_dir, target_class):
     
     return tf.constant(img)
 
-
+# load and preprocess custom images
+def load_and_preprocess_image(filename, img_shape, nomalize=True):
+    # load image
+    image = tf.io.read_file(filename)
+    
+    # decode image into tensor
+    image = tf.io.decode_image(img, channels=3)
+    
+    # resize image
+    tf.image.resize(image, [img_shape, img_shape])
+    
+    # models like efficientnet don't
+    #  need normalization -> make it optional
+    if normalize:
+        return image/255
+    else:
+        return image
+        
 # create a callback to track experiments in TensorBoard
 def create_tensorboard_callback(dir_name, experiment_name):
     # log progress to log directory
@@ -57,6 +74,30 @@ def create_checkpoint_callback(dir_name, experiment_name):
     print(f"INFO :: Saving Checkpoint to: {filepath}")
     return checkpoint_callback
 
+# early stop callback
+def create_early_stop_callback(monitor='val_loss',
+                                  min_delta=0.0001,
+                                  patience=10,
+                                  restore_best_weights=True):
+    early_stop_callback = tf.keras.callbacks.EarlyStopping(
+            monitor=monitor, min_delta=min_delta,
+            patience=patience, restore_best_weights=restore_best_weights)
+    print(f"INFO :: Early-stop set to: min_delta {min_delta}")
+    return early_stop_callback
+
+# reduce learning rate callback
+def create_reduce_learning_rate_callback(monitor="val_loss",  
+                                        factor=0.2,
+                                        patience=2,
+                                        min_lr=1e-7):
+    reduce_learning_rate_callback = tf.keras.callbacks.ReduceLROnPlateau(
+            monitor="val_loss",  
+            factor=factor, # multiply the learning rate by 0.2 (reduce by 5x)
+            patience=patience,
+            verbose=1, # print out when learning rate goes down 
+            min_lr=min_lr)
+    print(f"INFO :: Reduce learning rate set to: min lr {min_lr}")
+    return reduce_learning_rate_callback
 
 
 # helper function to create a model
@@ -80,7 +121,12 @@ def create_model(model_url, num_classes, augmented):
 data_augmentation_layer_no_rescaling = Sequential([
     RandomFlip("horizontal_and_vertical"),
     RandomRotation(0.2),
-    RandomZoom(0.1),
+    RandomZoom(0.2),
+    RandomTranslation(
+            height_factor=(-0.2, 0.3),
+            width_factor=(-0.2, 0.3),
+            fill_mode='reflect',
+            interpolation='bilinear'),
     RandomContrast(0.2),
     RandomBrightness(0.2)
 ], name="data_augmentation")
@@ -239,10 +285,14 @@ def plot_confusion_matrix(y_pred, y_true, classes=None, figsize = (12, 12), text
               yticklabels=labels)
 
         ax.xaxis.set_label_position("bottom")
-        ax.title.set_size(15)
-        ax.xaxis.label.set_size(15)
-        ax.yaxis.label.set_size(15)
+        ax.title.set_size(20)
+        ax.xaxis.label.set_size(20)
+        ax.yaxis.label.set_size(20)
         ax.xaxis.tick_bottom()
+
+        # vertical x-labels
+        plt.xticks(rotation=70, fontsize=text_size)
+        plt.yticks(fontsize=text_size)
 
 
         # colour threshold
