@@ -1,6 +1,9 @@
 # Tensorflow 2 - An (Re)Introduction 2023
 
 
+> Large passages of this repository are based on the [Tensorflow Deep Learning](https://github.com/mrdbourke/tensorflow-deep-learning) lecture notes by [Daniel Bourke](https://www.mrdbourke.com/).
+
+
 <details> 
 <summary> <h2>Module 1 - Fun, fun, tensors</h2> </summary>
 
