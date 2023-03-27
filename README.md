@@ -67,4 +67,5 @@
 | :---: | :---: |
 | [Autoencoder Feature Detection](https://mpolinowski.github.io/docs/IoT-and-Machine-Learning/ML/2023-03-24-tensorflow-unsupervised-learning-autoencoders/2023-03-24) | Use Autoencoders to Reduce Dimensionality and Feature Discovery |
 | [Autoencoder Super-Resolution](https://mpolinowski.github.io/docs/IoT-and-Machine-Learning/ML/2023-03-26-tensorflow-unsupervised-learning-autoencoders-super-resolution/2023-03-26) | Use Autoencoders to Increase Feature Resolution |
+| [Generative Adverserial Networks](https://mpolinowski.github.io/docs/IoT-and-Machine-Learning/ML/2023-03-26-tensorflow-unsupervised-learning-generative-adversial-networks/2023-03-26) | Generative Adverserial Networks for Image Data Generation |
 </details>
